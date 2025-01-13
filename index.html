@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unlimited Gmail account create</title>
+  <title>Account Creation</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -277,6 +277,14 @@
       max-width: 90%;
       max-height: 80%;
     }
+
+    /* Error message */
+    #errorMessage {
+      margin-top: 15px;
+      color: red;
+      font-weight: bold;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -318,11 +326,8 @@
         <input type="date" id="dob" required>
       </div>
       <div class="form-group">
-        <label for="email">Email Address</label>
-        <div class="email-container">
-          <input type="text" id="username" placeholder="Enter username" required>
-          <span>@gmail.com</span>
-        </div>
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
@@ -340,6 +345,7 @@
     </div>
     <div id="message"></div>
     <p id="details"></p>
+    <div id="errorMessage"></div>
 
     <!-- Bottom Buttons -->
     <div class="bottom-buttons">
@@ -370,6 +376,14 @@
     function playButtonSound() {
       const buttonSound = new Audio('button.mp3');
       buttonSound.play();
+      
+      if (!switchEnabled) {
+        document.getElementById('errorMessage').textContent = "দুঃখিত, একাউন্ট তৈরির জন্য উপরের সুইচ টা অন করতে হবে";
+        document.getElementById('errorMessage').style.display = "block";
+        document.getElementById('message').textContent = ''; // Hide success message
+      } else {
+        document.getElementById('errorMessage').style.display = "none";
+      }
     }
 
     // Toggle switch functionality
@@ -411,8 +425,10 @@
 
       setTimeout(function() {
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('message').textContent = `Account Created Successfully for ${fullName}!`;
-        document.getElementById('details').textContent = `Username: ${username}, Date of Birth: ${dob}`;
+        if (switchEnabled) {
+          document.getElementById('message').textContent = `Account Created Successfully for ${fullName}!`;
+          document.getElementById('details').textContent = `Username: ${username}, Date of Birth: ${dob}`;
+        }
       }, 2000);
     });
 
