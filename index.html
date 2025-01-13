@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Creation</title>
+  <title>Unlimited Gmail account create</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -24,7 +24,7 @@
       width: 100%;
       max-width: 400px;
       text-align: center;
-      position: relative; /* To place the toggle switch inside the container */
+      position: relative;
     }
 
     .form-container img {
@@ -249,6 +249,34 @@
     .key-box input {
       margin-right: 5px;
     }
+
+    /* Bell icon */
+    .bell-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      font-size: 24px;
+      color: #fff;
+    }
+
+    /* Video modal */
+    #workModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #workModal video {
+      max-width: 90%;
+      max-height: 80%;
+    }
   </style>
 </head>
 <body>
@@ -256,13 +284,8 @@
     <img src="https://i.ibb.co/grwTQZ0/5968534.png" alt="Logo">
     <h2>Create Account</h2>
 
-    <!-- On/Off Switch at the top-right corner -->
-    <div class="switch-container">
-      <label class="switch">
-        <input type="checkbox" id="toggleSwitch" disabled>
-        <span class="slider"></span>
-      </label>
-    </div>
+    <!-- Bell Icon -->
+    <div class="bell-icon" onclick="generateID()">🔔</div>
 
     <!-- Popup for key entry -->
     <div id="keyPopup">
@@ -275,6 +298,14 @@
         </div>
         <button id="enableSwitch">Submit Key</button>
       </div>
+    </div>
+
+    <!-- Switch for toggling -->
+    <div class="switch-container">
+      <label class="switch">
+        <input type="checkbox" id="toggleSwitch" disabled>
+        <span class="slider"></span>
+      </label>
     </div>
 
     <form id="accountForm">
@@ -295,38 +326,59 @@
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password" required>
+        <input type="password" id="password" placeholder="Enter password" required>
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required>
       </div>
-      <button type="submit" class="btn">Create Account</button>
+      <button type="submit" class="btn" onclick="playButtonSound()">Create Account</button>
     </form>
-    <p id="loading">Creating account...</p>
-    <p id="message"></p>
-    <div id="details"></div>
 
-    <!-- Bottom buttons -->
+    <div id="loading">
+      <img src="https://i.ibb.co/Sd0T00T/loading.gif" alt="Loading" width="50"> Creating Account...
+    </div>
+    <div id="message"></div>
+    <p id="details"></p>
+
+    <!-- Bottom Buttons -->
     <div class="bottom-buttons">
-      <button onclick="playHowToWork()">How to Work</button>
-      <button onclick="playButtonSound()">Live Chat</button>
+      <button onclick="openHowToWork()">How to Work</button>
+      <button onclick="openLiveChat()">Live Chat</button>
     </div>
   </div>
 
+  <!-- Work Modal for video -->
+  <div id="workModal">
+    <video id="workVideo" controls>
+      <source src="work.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
   <script>
+    const correctKey = "12345"; // Example key
     let switchEnabled = false;
-    const correctKey = "12345"; // Correct key to enable the switch
+
+    function generateID() {
+      const userID = Math.floor(Math.random() * 100000) + 1;
+      alert("ID: " + userID);
+      const bellSound = new Audio('bell.mp3'); 
+      bellSound.play(); 
+    }
+
+    function playButtonSound() {
+      const buttonSound = new Audio('button.mp3');
+      buttonSound.play();
+    }
 
     // Toggle switch functionality
     document.getElementById('toggleSwitch').addEventListener('click', function() {
       if (!switchEnabled) {
-        // Show the key popup when switch is clicked
         document.getElementById('keyPopup').style.display = 'flex';
       }
     });
 
-    // Handle key submission
     document.getElementById('enableSwitch').addEventListener('click', function() {
       const enteredKey = document.getElementById('key').value;
       const isKeyChecked = document.getElementById('keyCheckBox').checked;
@@ -340,7 +392,7 @@
       }
     });
 
-    // Handle form submission
+    // Handle account creation form submission
     document.getElementById('accountForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -362,6 +414,24 @@
         document.getElementById('message').textContent = `Account Created Successfully for ${fullName}!`;
         document.getElementById('details').textContent = `Username: ${username}, Date of Birth: ${dob}`;
       }, 2000);
+    });
+
+    // Open Live Chat (Telegram link)
+    function openLiveChat() {
+      window.location.href = "https://t.me/x_mostafizur"; // Opens the Telegram link
+    }
+
+    // Open How to Work Modal
+    function openHowToWork() {
+      const workModal = document.getElementById('workModal');
+      workModal.style.display = 'flex';
+    }
+
+    // Close How to Work Modal when clicked outside of video
+    document.getElementById('workModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+      }
     });
   </script>
 </body>
